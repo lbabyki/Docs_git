@@ -1,6 +1,6 @@
 # SITEMAP CÂY MÀN HÌNH VÀ SCREEN FLOW TOÀN HỆ THỐNG – GIA SƯ AI
 
-**Phiên bản:** V3 – Sitemap cây màn hình, hành động điều hướng và dữ liệu liên vai trò  
+**Phiên bản:** V4.0 – Sitemap đã rà soát theo bảng mô tả chức năng  
 **Ngày:** 30/07/2026  
 **Nguồn nghiệp vụ chính:** `describe_feature_gia_su_ai(3).csv`  
 **Nguồn đối chiếu:** FE/BE hiện tại và tài liệu `Phan_tich_man_hinh_va_Screen_Flow_Gia_Su_AI.md`
@@ -28,12 +28,17 @@ Bao gồm:
 - Xác thực, tài khoản và phân quyền.
 - Nội dung học tập, khóa học, Lesson và Microlearning.
 - Học sinh học bài và dùng AI trong Microlearning.
+- Học sinh hỏi nhu cầu học tập trong Chat tổng và nhận đề xuất Course từ AI.
 - Bài tập, kiểm tra, lịch sử attempt, kiến thức yếu và Retake.
 - Lớp học và buổi học.
 - AI Service, AI chấm tự luận và AI sinh câu hỏi.
 - Ngân hàng câu hỏi và ma trận đề.
 - Kho học liệu dành cho Giáo viên.
 - Tìm kiếm, báo lỗi/khiếu nại, audit và cấu hình hệ thống.
+- Trung tâm thông báo và deep link đến đối tượng nghiệp vụ.
+- Bài được giao của Học sinh.
+- Giáo viên giám sát nội dung AI hỗ trợ trong lớp.
+- Báo cáo học tập toàn hệ thống.
 
 Không bao gồm:
 
@@ -55,13 +60,13 @@ Các chức năng `3.4`, `3.5`, `3.6` liên quan đến chứng nhận không đ
 | Phân hệ | Số màn hình |
 |---|---:|
 | Công khai và xác thực (`PUB`, `AUTH`) | 8 |
-| Dùng chung theo tài khoản (`COM`) | 4 |
-| Học sinh (`STU`) | 27 |
-| Giáo viên (`TEA`) | 23 |
-| Quản trị viên (`ADM`) | 25 |
-| **Tổng cộng** | **87** |
+| Dùng chung theo tài khoản (`COM`) | 5 |
+| Học sinh (`STU`) | 25 |
+| Giáo viên (`TEA`) | 24 |
+| Quản trị viên (`ADM`) | 26 |
+| **Tổng cộng** | **88** |
 
-> Con số 87 không bao gồm modal/drawer bắt buộc và không bao gồm bất kỳ màn hình quản lý chứng nhận nào.
+> Con số 88 không bao gồm modal/drawer bắt buộc hoặc màn hình quản lý chứng nhận.
 
 ## 3. Quy ước mã màn hình
 
@@ -97,6 +102,7 @@ flowchart TD
     STUDENT --> S2["Lớp học và buổi học"]
     STUDENT --> S3["Microlearning và AI"]
     STUDENT --> S4["Bài tập, điểm yếu, Retake"]
+    STUDENT --> S5["Chat tổng và đề xuất Course"]
 
     TEACHER --> T1["Lớp và tiến độ học sinh"]
     TEACHER --> T2["Giao bài và tự luận"]
@@ -105,7 +111,7 @@ flowchart TD
 
     ADMIN --> A1["Tài khoản, quyền và audit"]
     ADMIN --> A2["Nội dung và học liệu"]
-    ADMIN --> A3["Câu hỏi, AI và Assessment"]
+    ADMIN --> A3["Câu hỏi và AI"]
     ADMIN --> A4["Lớp, báo cáo và hệ thống"]
 ```
 
@@ -260,6 +266,7 @@ flowchart TD
 | COM-02 | Bảo mật và phiên đăng nhập | Xem lịch sử đăng nhập/đăng xuất, thời gian truy cập, đổi mật khẩu và phiên đang hoạt động. | COM-01 | Đổi mật khẩu → xác nhận tại chỗ; đăng xuất phiên → AUTH-04 |
 | COM-03 | Kết quả tìm kiếm toàn văn | Hiển thị kết quả phân trang, sắp xếp tương đồng và bộ lọc đúng quyền từng vai trò. | Thanh tìm kiếm global | Student → STU-04/STU-07; Teacher → TEA-03/TEA-20; Admin → entity quản trị tương ứng |
 | COM-04 | Report/Báo lỗi/Khiếu nại | Form chọn Lỗi hệ thống, AI ảo giác hoặc Khiếu nại điểm; nhập mô tả, đính kèm ngữ cảnh màn hiện tại. | Nút Report toàn cục | Gửi thành công → quay lại màn nguồn; chưa đăng nhập → AUTH-04 |
+| COM-05 | Trung tâm thông báo | Xem thông báo đã đọc/chưa đọc về lời mời lớp, duyệt tham gia, bài được giao, deadline, Retake, import/export, tự luận và gói Pro. | Header sau đăng nhập, sự kiện hệ thống | Chọn thông báo → deep link đến STU-21/25, STU-16/17/24, TEA-07/12/14/22/23 hoặc màn Admin liên quan; đánh dấu đã đọc → ở lại |
 
 ## 8. Sitemap Học sinh
 
@@ -288,7 +295,7 @@ flowchart TD
 | STU-01 | Dashboard Học sinh | Tổng quan khóa đang học, lớp, tiến độ, retake còn lại, điểm cao nhất, lịch học gần nhất và gợi ý tiếp tục. | AUTH-04, logo/sidebar | Tiếp tục học → STU-06/07; tìm khóa → STU-03; vào lớp → STU-20; tiến độ → STU-12 |
 | STU-02 | Danh sách ngành học | Tìm kiếm và xem các ngành; làm điểm vào để lọc khóa học. | STU-01, COM-03 | Chọn ngành → STU-03 với bộ lọc; tìm kiếm → kết quả tại chỗ |
 | STU-03 | Khám phá khóa học | Tìm kiếm/lọc theo ngành, giáo viên và trạng thái Active; phân trang danh sách khóa công khai. | STU-01, STU-02, COM-03 | Chọn khóa → STU-04 |
-| STU-04 | Chi tiết và đăng ký khóa học | Xem mô tả, cấu trúc Module/Lesson/Microlearning và điều kiện; đăng ký nhưng không tự hủy sau đăng ký. | STU-03, PUB-02, STU-23 | Đăng ký → STU-05 hoặc STU-06; đã sở hữu → STU-06; Assessment đầu vào → STU-22 |
+| STU-04 | Chi tiết và đăng ký khóa học | Xem mô tả, cấu trúc Module/Lesson/Microlearning và điều kiện; đăng ký nhưng không tự hủy sau đăng ký. | STU-03, PUB-02, STU-08, STU-23 | Đăng ký → STU-05 hoặc STU-06; đã sở hữu → STU-06; quay lại Chat tổng → STU-08 |
 | STU-05 | Khóa học của tôi | Danh sách đang học/đã hoàn thành, phần trăm tiến độ và hành động tiếp tục học. | STU-01, STU-04, sidebar | Chọn khóa → STU-06; tìm khóa mới → STU-03 |
 | STU-06 | Tổng quan phòng học | Cấu trúc Course → Module → Lesson → Microlearning; thể hiện bài đã xong, hiện tại, bị khóa và lý do khóa. | STU-04, STU-05, STU-20 | Chọn Microlearning mở → STU-07; bài tập tổng hợp → STU-09; thông tin lớp → STU-21 |
 
@@ -297,7 +304,7 @@ flowchart TD
 | Mã | Màn hình | Mục đích và chức năng chính | Màn hình nguồn | Thao tác → màn hình đích |
 |---|---|---|---|---|
 | STU-07 | Không gian Microlearning | Workspace học gồm ba tab bắt buộc: Kiến thức, Mô phỏng, Bài tập; breadcrumb đủ Course/Module/Lesson/Microlearning; lưu tiến độ. | STU-06, STU-14, STU-18 | Kiến thức/Mô phỏng → ở lại theo tab; bài tập → STU-09; lịch sử AI → STU-08; hoàn thành → Microlearning tiếp theo hoặc STU-06 |
-| STU-08 | Lịch sử hội thoại AI | Danh sách và tìm lại cuộc trò chuyện theo khóa/bài; mở tiếp hội thoại có ngữ cảnh. | AI drawer tại STU-07/STU-09 | Chọn hội thoại → mở AI drawer tại đúng STU-07/STU-09; tạo hội thoại mới → quay lại màn gọi |
+| STU-08 | Chat tổng và lịch sử hội thoại AI | Học sinh đặt câu hỏi chung về nhu cầu, mục tiêu hoặc môn muốn học; AI tư vấn và hiển thị các Course phù hợp. Đồng thời lưu, tìm và mở lại lịch sử hội thoại tổng hoặc hội thoại theo ngữ cảnh bài học. | STU-01, sidebar, AI drawer tại STU-07/STU-09/STU-11 | Gửi câu hỏi → AI trả lời tại chỗ; chọn Course được đề xuất → STU-04; chọn hội thoại theo bài → mở AI drawer tại đúng STU-07/STU-09/STU-11; tạo hội thoại mới → ở lại STU-08 |
 | STU-09 | Làm bài tập Microlearning | Nhiều loại câu hỏi, tự do điều hướng, lưu đáp án; AI hỗ trợ không đưa đáp án; hiển thị quota/cooldown. | STU-07, STU-10, STU-11 | Nộp bài → STU-10; hỏi AI → drawer tại chỗ; thoát có lưu nháp → STU-07 |
 | STU-10 | Kết quả attempt | Điểm lần này, điểm cao nhất, trạng thái Completed; lưu Completed nếu từng đạt ngưỡng; danh sách đúng/sai. | STU-09 | Xem attempt → STU-11; làm lại → STU-09; xem điểm yếu → STU-13; bài tiếp → STU-07 |
 | STU-11 | Chi tiết câu sai và luyện tương tự | Hiện đáp án sau nộp, giải thích tĩnh/AI, media; sinh câu tương đương không tính điểm. | STU-10, STU-14 | Làm câu tương tự → ở lại; hỏi AI → drawer; học lại lý thuyết → STU-07; quay lại → STU-10 |
@@ -326,7 +333,7 @@ AI Drawer không phải route riêng nhưng phải có:
 | STU-18 | Kết quả Retake | Xem điểm, lỗi còn lại, thay đổi Learning Profile và hành động tiếp theo. | STU-17 | Điểm yếu → STU-13/14; học lại → STU-07; Retake mới → STU-15 |
 | STU-19 | Lịch sử attempt và bài đã làm | Danh sách attempt chính thức/Retake/tự luận, điểm và trạng thái duyệt. | STU-12, STU-10 | Attempt trắc nghiệm → STU-10; tự luận → STU-24 |
 
-### 8.4. Lớp học, buổi học và Assessment
+### 8.4. Lớp học và buổi học
 
 | Mã | Màn hình | Mục đích và chức năng chính | Màn hình nguồn | Thao tác → màn hình đích |
 |---|---|---|---|---|
@@ -335,9 +342,7 @@ AI Drawer không phải route riêng nhưng phải có:
 | STU-22 | Tham gia lớp | Nhập invite code hoặc xác nhận link mời; xử lý Mở/Duyệt/Mời và trạng thái chờ duyệt. | STU-01, STU-20, email mời | Thành công → STU-21; chờ duyệt → STU-20 với trạng thái; lỗi → ở lại |
 | STU-23 | Chi tiết buổi học | Xem thời gian, phòng/link Online, giảng viên và nội dung liên quan. | STU-01, STU-21 | Đến giờ → mở link/phòng; học liệu liên quan → STU-07; quay lại → STU-21 |
 | STU-24 | Bài tự luận và kết quả | Soạn/nộp bài tự luận; sau nộp xem AI chấm nháp ở trạng thái chờ, chỉ xem điểm chính thức sau Teacher duyệt. | STU-07, bài được giao | Nộp → trạng thái Chờ duyệt; đã duyệt → xem điểm/nhận xét; quay lại → STU-19 |
-| STU-25 | Thiết lập Assessment đầu vào | Chọn ngành/môn và xem hướng dẫn, cấu trúc, thời lượng trước khi bắt đầu đánh giá năng lực. | STU-01, STU-04 | Bắt đầu → STU-26; hủy → màn nguồn |
-| STU-26 | Làm Assessment đầu vào | Hiển thị câu hỏi, tiến độ, điều hướng, lưu đáp án và xác nhận nộp. | STU-25 | Nộp → STU-27; thoát có xác nhận → STU-25 |
-| STU-27 | Kết quả và khóa học đề xuất | Hiển thị điểm, level đã mapping và danh sách khóa phù hợp theo cấu hình Admin. | STU-26 | Chọn khóa → STU-04; về Dashboard → STU-01; làm lại nếu được phép → STU-25 |
+| STU-25 | Bài được giao | Danh sách Assignment theo lớp với trạng thái Chưa làm/Đang làm/Đã nộp/Đã chấm/Quá hạn, deadline và Teacher giao; mở đúng loại bài. | STU-01, STU-21, COM-05, sidebar | Chọn trắc nghiệm → STU-09; chọn tự luận → STU-24; xem bài đã chấm → STU-10/STU-24; lọc → ở lại |
 
 ## 9. Sitemap Giáo viên
 
@@ -362,7 +367,7 @@ flowchart TD
 | Mã | Màn hình | Mục đích và chức năng chính | Màn hình nguồn | Thao tác → màn hình đích |
 |---|---|---|---|---|
 | TEA-01 | Dashboard Giáo viên | Tổng quan lớp, học sinh, bài chờ xử lý, buổi sắp tới, lớp có nguy cơ và trạng thái gói. | AUTH-04, logo/sidebar | Lớp → TEA-03; bài chờ duyệt → TEA-14; nâng cấp → TEA-23 |
-| TEA-02 | Khóa học được quyền dạy | Tìm kiếm khóa theo khối/môn được cấp; xem cấu trúc read-only; chọn khóa để mở lớp. | TEA-01, sidebar | Chọn khóa → STU-06 ở chế độ Teacher read-only; tạo lớp → TEA-05 |
+| TEA-02 | Khóa học được quyền dạy | Tìm theo tên/mô tả/Lesson/tag; lọc ngành, trạng thái và Teacher trong phạm vi khối/môn được cấp; preview cấu trúc read-only hoặc chọn khóa để mở lớp. | TEA-01, sidebar, COM-03 | Chọn khóa → Course Preview tại chỗ; tạo lớp → TEA-05 |
 | TEA-03 | Danh sách lớp | Tìm/lọc lớp tự tạo hoặc được Admin phân công; xem mã mời, trạng thái và sĩ số. | TEA-01, sidebar | Chọn lớp → TEA-04; tạo lớp → TEA-05 |
 | TEA-04 | Chi tiết và vận hành lớp | Thông tin lớp, học sinh, mã mời, khóa/mở lớp, reset/vô hiệu mã; điều hướng các nghiệp vụ lớp. | TEA-03, TEA-05 | Cấu hình → TEA-06; học sinh → TEA-09; yêu cầu vào lớp → TEA-07; buổi học → TEA-08; giao bài → TEA-11 |
 | TEA-05 | Tạo lớp | Chọn khóa được quyền dạy, tên lớp; sau tạo hệ thống sinh mã mời duy nhất. | TEA-02, TEA-03 | Tạo thành công → TEA-06 hoặc TEA-04; hủy → TEA-03 |
@@ -409,6 +414,7 @@ Tại TEA-10/13, Giáo viên phải:
 | TEA-21 | Chi tiết/preview học liệu | Preview docs/pdf/ppt/video, metadata và quyền; ghi log khi xem; tải nếu được phép. | TEA-20 | Tải → modal/xác nhận và ở lại; quay lại → TEA-20 |
 | TEA-22 | Lịch sử import/export câu hỏi | Theo dõi tác vụ nền, số dòng thành công/lỗi, tải file log hoặc file export bằng URL có hạn. | TEA-16 | Hoàn tất → TEA-16; tải log → ở lại |
 | TEA-23 | Gói tài khoản và nâng cấp Pro | So sánh Free/Pro, quota AI; hiển thị QR SePay, đếm 5 phút và hướng dẫn liên hệ nếu chưa kích hoạt. | TEA-01, COM-01, tính năng AI bị giới hạn | Đã kích hoạt → TEA-01/TEA-16; hết thời gian → trạng thái hỗ trợ; hủy → màn nguồn |
+| TEA-24 | Giám sát hội thoại AI của lớp | Xem hội thoại AI thuộc lớp phụ trách theo Student/Course/Lesson/Microlearning, câu trả lời bị report và nội dung giải thích; chỉ đọc dữ liệu học tập, không sửa kết quả hay Learning Profile. | TEA-04, TEA-09, TEA-10, COM-05 | Chọn hội thoại → chi tiết tại chỗ; xem ngữ cảnh học → Course Preview/Microlearning Preview; report nội dung → COM-04 |
 
 ## 10. Sitemap Quản trị viên
 
@@ -444,20 +450,19 @@ flowchart TD
 | ADM-07 | Quản lý khóa học | Tìm/lọc, tạo/sửa/khóa; xem cấu trúc và import nội dung. | ADM-01, ADM-06, sidebar | Tạo/sửa → ADM-08; cấu trúc → ADM-09 |
 | ADM-08 | Form khóa học | Nhập ngành, level, mô tả, ảnh, trạng thái và thông tin hiển thị. | ADM-07 | Lưu → ADM-07/09; hủy → ADM-07 |
 | ADM-09 | Cấu trúc Module/Lesson/Microlearning | Cây nội dung; thêm/sửa/xóa/sắp xếp và kiểm định đúng cấp. | ADM-07, ADM-08 | Chọn Microlearning → ADM-10; chỉnh node → form tại chỗ; quay lại → ADM-07 |
-| ADM-10 | Biên tập Microlearning | Quản lý ba nhóm nội dung bắt buộc: Kiến thức, Mô phỏng, Bài tập; preview như Học sinh. | ADM-09 | Tài nguyên → ADM-11; câu hỏi → ADM-13; preview → STU-07 chế độ preview; lưu → ADM-09 |
+| ADM-10 | Biên tập Microlearning | Quản lý ba nhóm nội dung bắt buộc: Kiến thức, Mô phỏng, Bài tập; mở Microlearning Preview trong không gian Admin. | ADM-09 | Tài nguyên → ADM-11; câu hỏi → ADM-13; preview → Microlearning Preview; lưu → ADM-09 |
 | ADM-11 | Kho tài nguyên học tập | Quản lý lý thuyết, video, slide, mô phỏng HTML; kiểm tra định dạng/dung lượng dưới 16MB. | ADM-10, sidebar | Upload/sửa → ADM-12; gắn vào Microlearning → ADM-10 |
 | ADM-12 | Chi tiết và kiểm định tài nguyên | Preview, metadata, quyền, mã hóa/bảo vệ mô phỏng HTML; duyệt hoặc từ chối. | ADM-11, ADM-20 | Duyệt → ADM-11/20; sửa → ở lại; xóa → ADM-11 |
 
-### 10.3. Câu hỏi, Assessment và AI
+### 10.3. Câu hỏi và AI
 
 | Mã | Màn hình | Mục đích và chức năng chính | Màn hình nguồn | Thao tác → màn hình đích |
 |---|---|---|---|---|
-| ADM-13 | Ngân hàng câu hỏi hệ thống | CRUD, tìm/lọc theo Bloom/chương, media, import/export và câu AI đã duyệt. | ADM-01, ADM-10, ADM-16 | Tạo/sửa → ADM-14; Pending AI → ADM-15 |
+| ADM-13 | Ngân hàng câu hỏi hệ thống | CRUD, tìm/lọc theo Bloom/chương, media, import/export và câu AI đã duyệt; tab Job theo dõi tiến trình, lỗi, template và URL export có hạn. | ADM-01, ADM-10, ADM-16 | Tạo/sửa → ADM-14; Pending AI → ADM-15; import/export → tab Job tại chỗ |
 | ADM-14 | Tạo/sửa/chi tiết câu hỏi | Nội dung, loại câu, đáp án, giải thích, Bloom, liên kết kiến thức và media; quản lý vùng tạm. | ADM-13, ADM-16 | Lưu → ADM-13; audit → ADM-04; hủy → ADM-13 |
 | ADM-15 | Hàng đợi câu hỏi AI | Danh sách Pending từ Teacher/ma trận/AI; lọc nguồn, người tạo, chương và tuổi tác hàng đợi. | ADM-01, ADM-13, sidebar | Chọn câu/bộ câu → ADM-16 |
 | ADM-16 | Kiểm duyệt câu hỏi AI | Xem nguồn/prompt/ngữ cảnh, sửa nội dung; duyệt/từ chối và ghi lý do. | ADM-15 | Duyệt → ADM-13; từ chối → ADM-15; lưu sửa → ở lại |
-| ADM-17 | Cấu hình Assessment và chuẩn điểm | Mapping điểm → level → khóa đề xuất; cấu hình ngưỡng pass mặc định hoặc theo môn. | ADM-01, sidebar | Lưu → ADM-01; preview mapping → tại chỗ |
-| ADM-18 | Quản trị AI, RAG và Prompt | Nạp/quét tài liệu, nguồn RAG, prompt chatbot, quota/cooldown, cache giải thích và token Pro. | ADM-01, sidebar | Nguồn học liệu → ADM-20; log tiêu thụ → ADM-19; lưu → ADM-01 |
+| ADM-18 | Quản trị AI, RAG, Prompt và Rubric | Nạp/quét tài liệu, nguồn RAG, prompt chatbot, quota/cooldown, cache giải thích, token Pro; quản lý Rubric tự luận theo phạm vi, tiêu chí, trọng số, phiên bản và trạng thái publish. | ADM-01, sidebar | Nguồn học liệu → ADM-20; log tiêu thụ → ADM-19; lưu cấu hình/Rubric → ở lại hoặc ADM-01 |
 | ADM-19 | Giám sát AI và API | Lượt chat, token, chi phí, Retake async, lỗi, cache hit và báo cáo AI chấm tự luận. | ADM-01, ADM-18 | Chọn log → chi tiết tại chỗ; cấu hình → ADM-18 |
 | ADM-20 | Quản trị kho học liệu Giáo viên | Cấu trúc cây, miễn phí/trả phí, tìm/lọc; upload/quản lý/kiểm định file; xem audit xem/tải. | ADM-01, ADM-11, sidebar | Tài liệu → ADM-12; audit → ADM-04; chỉnh cây → tại chỗ |
 
@@ -467,9 +472,11 @@ flowchart TD
 |---|---|---|---|---|
 | ADM-21 | Hộp thư Report/Khiếu nại | Nhận report đã định tuyến; lọc loại, tổ chức, trạng thái, mức ưu tiên. | ADM-01, sidebar | Chọn report → ADM-22 |
 | ADM-22 | Chi tiết và xử lý Report | Xem người gửi, màn nguồn, nội dung, bằng chứng và lịch sử; phân công, phản hồi, đóng/mở lại. | ADM-21 | Xử lý → ADM-21; audit/entity liên quan → ADM-04 hoặc màn tương ứng |
-| ADM-23 | Quản lý gói Teacher và cài đặt hệ thống | Cấu hình Free/Pro, tra soát/kích hoạt thủ công; quản lý role policy, search index, session, OTP và giới hạn hệ thống. | ADM-01, ADM-03, sidebar | Kích hoạt → ADM-03; lưu cấu hình → ADM-01; audit → ADM-04 |
+| ADM-23 | Quản lý gói Teacher và cài đặt hệ thống | Cấu hình Free/Pro, tra soát/kích hoạt thủ công; quản lý role policy, search index, session, OTP, quota và ngưỡng đạt mặc định/toàn hệ thống/theo môn học. | ADM-01, ADM-03, sidebar | Kích hoạt → ADM-03; lưu cấu hình → ADM-01; audit → ADM-04 |
 | ADM-24 | Quản lý lớp toàn hệ thống | Danh sách/tìm/lọc lớp theo tổ chức, Teacher, khóa và trạng thái; tạo hoặc phân công Teacher, khóa/xóa lớp, giám sát mã mời. | ADM-01, sidebar, COM-03 | Chọn lớp → ADM-25; tạo/phân công → form tại chỗ rồi ADM-25 |
 | ADM-25 | Chi tiết và giám sát lớp | Xem cấu hình, Teacher, học sinh, buổi học, mã mời và hoạt động; can thiệp khóa/xóa hoặc đổi phân công theo quyền tổ chức. | ADM-24, ADM-21/22 | Teacher/user → ADM-03; audit → ADM-04; lưu can thiệp → ADM-24/25 |
+| ADM-26 | Báo cáo học tập toàn hệ thống | Tổng hợp pass/hoàn thành, điểm, tiến độ và bài được giao theo tổ chức/Course/lớp/Teacher/Student; hỗ trợ lọc và xuất báo cáo. | ADM-01, sidebar, ADM-25 | Chọn dòng/đối tượng → ADM-27; xuất → tác vụ tại chỗ và COM-05 khi hoàn tất |
+| ADM-27 | Chi tiết kết quả học tập | Xem kết quả Student/lớp/Course, attempt, điểm chính thức, override và dữ liệu đối chiếu; tuân thủ phạm vi tổ chức. | ADM-26, ADM-25, ADM-22 | User → ADM-03; lớp → ADM-25; audit điểm → ADM-04; quay lại → ADM-26 |
 
 ## 11. Ma trận điều hướng chức năng quan trọng
 
@@ -478,10 +485,11 @@ flowchart TD
 | Đăng ký tài khoản | AUTH-01 | Email hợp lệ | AUTH-02 → AUTH-03 |
 | Đăng nhập | AUTH-04 | Đúng tài khoản/quyền | Dashboard theo role |
 | Đăng ký khóa | STU-04 | Chưa đăng ký | STU-05/06 |
-| Làm Assessment đầu vào | STU-25 | Đã chọn ngành/môn | STU-26 → STU-27 |
+| Hỏi Chat tổng để được đề xuất Course | STU-08 | Học sinh mô tả nhu cầu/mục tiêu học tập | Chọn Course được AI đề xuất → STU-04 |
 | Học Microlearning | STU-06 | Bài đã mở | STU-07 |
 | Hỏi AI trong bài | STU-07/09 | Còn quota/cooldown xong | AI Drawer tại chỗ |
 | Nộp bài | STU-09 | Đủ điều kiện nộp | STU-10 |
+| Mở bài được giao | STU-25 | Assignment còn quyền truy cập | STU-09 hoặc STU-24 |
 | Ôn điểm yếu | STU-10/13 | Có dữ liệu lỗi | STU-14/15 |
 | Tạo Retake | STU-15 | Còn quota | STU-16 → STU-17 |
 | Tham gia lớp | STU-22 | Mở/Duyệt/Mời | STU-21 hoặc trạng thái chờ |
@@ -491,6 +499,7 @@ flowchart TD
 | AI sinh câu hỏi | TEA-18 | Teacher Pro, đủ quota | ADM-15 Pending |
 | Admin duyệt câu AI | ADM-16 | Nội dung đạt yêu cầu | ADM-13 |
 | Report vấn đề | COM-04 | Form hợp lệ | Quay lại màn nguồn; ADM-21 nhận |
+| Mở thông báo | COM-05 | Deep link còn hiệu lực và đúng quyền | Màn hình đối tượng tương ứng |
 
 ## 12. Quy tắc điều hướng và thiết kế bắt buộc
 
@@ -509,6 +518,8 @@ flowchart TD
 13. Mọi tác vụ bất đồng bộ như Retake/import/export phải có màn/trạng thái tiến trình và thông báo hoàn tất.
 14. Tài nguyên trả phí của Teacher không public; Student bị chặn cả menu lẫn route.
 15. Mỗi màn hình dữ liệu phải có đủ loading, empty, error, forbidden, success và retry.
+16. Admin toàn hệ thống và quản lý tổ chức dùng cùng nhóm màn hình `ADM`, nhưng dữ liệu phải được giới hạn bằng `organization_scope`; chỉ Super Admin được truy cập liên tổ chức.
+17. Ngưỡng đạt ưu tiên theo thứ tự: cấu hình môn học → cấu hình toàn hệ thống → mặc định 70%.
 
 ## 13. Các modal/drawer/UI state bắt buộc nhưng không tính là màn hình
 
@@ -524,6 +535,8 @@ flowchart TD
 | Xóa/khóa tài khoản | COM-01, ADM-03 | Chính sách, lý do và xác nhận |
 | Upload/import progress | TEA-22, ADM-11/13 | Tiến trình, kết quả, file lỗi |
 | Report | Toàn hệ thống | Phân loại, mô tả, context và trạng thái gửi |
+| Trạng thái đăng ký Course | STU-04 | Thành công, đã đăng ký, Course không Active, không đủ quyền và nguồn đề xuất từ Chat tổng |
+| Trạng thái tham gia lớp | STU-22 | Chờ duyệt, hủy yêu cầu, mã/lời mời hết hạn, bị từ chối và gửi lại |
 
 ## 14. Traceability theo nhóm chức năng
 
@@ -531,16 +544,16 @@ flowchart TD
 |---|---|
 | 1.1–1.4 Xác thực | AUTH-01–05 |
 | 1.5–1.9 Hồ sơ, quyền, log | COM-01–02, ADM-02–05 |
-| 2.1–2.5 Nội dung học tập | STU-02–07, STU-25–27, TEA-02, ADM-06–12 |
+| 2.1–2.5 Nội dung học tập | STU-02–07, TEA-02, ADM-06–12 |
 | 2.6–2.10 Kho học liệu và mô phỏng | TEA-20–21, ADM-11–12, ADM-20 |
-| 3.1–3.3 Bài tập và kết quả | STU-09–12, TEA-09–13 |
+| 3.1–3.3 Bài tập và kết quả | STU-09–12, STU-25, TEA-09–13, ADM-26–27 |
 | 3.4–3.6 Chứng nhận | **Loại khỏi phiên bản này** |
 | 4.1–4.7 Lớp và gói Teacher | STU-20–23, TEA-03–08, TEA-23, ADM-23–25 |
-| 5.1–5.4 Chat AI và giải thích | PUB-03, STU-07–11, ADM-18–19 |
+| 5.1–5.4 Chat AI, đề xuất Course và giải thích | PUB-03, STU-07–11, TEA-24, ADM-18–19 |
 | 5.5–5.6 Điểm yếu và Retake | STU-13–18, TEA-09–10, ADM-19 |
 | 5.7 AI chấm tự luận | STU-24, TEA-14–15, ADM-18–19 |
 | 5.8 AI sinh câu hỏi | TEA-16–19, ADM-15–19 |
-| 6.1–6.6 Ngân hàng và ma trận | TEA-16–22, ADM-13–17 |
+| 6.1–6.6 Ngân hàng và ma trận | TEA-16–22, ADM-13–16 |
 | 7.1–7.2 Tìm kiếm | COM-03 và danh sách theo role |
 | 8.1 Report | COM-04, ADM-21–22 |
 
@@ -576,10 +589,9 @@ flowchart TD
     DELIVERY --> D3["Microlearning + AI theo ngữ cảnh"]
     DELIVERY --> D4["Giao bài và theo dõi"]
 
-    ASSESS --> A1["Assessment đầu vào"]
-    ASSESS --> A2["Attempt, chấm điểm và kết quả"]
-    ASSESS --> A3["Kiến thức yếu và Learning Profile"]
-    ASSESS --> A4["AI Retake và tự luận"]
+    ASSESS --> A1["Attempt, chấm điểm và kết quả"]
+    ASSESS --> A2["Kiến thức yếu và Learning Profile"]
+    ASSESS --> A3["AI Retake và tự luận"]
 
     OPS --> O1["AI, RAG, prompt và quota"]
     OPS --> O2["Report, khiếu nại và audit"]
@@ -596,7 +608,8 @@ flowchart TD
 | Kho học liệu | Xem tài nguyên gắn trong bài đã mở | Xem/tải kho Teacher theo môn và loại Free/Paid | Quản lý cây kho, tệp, quyền và kiểm định | Learning Resource, Access Log |
 | Lớp học | Tham gia, xem lịch và buổi học | Tạo/nhận lớp, cấu hình, mời/duyệt Student | Giám sát, phân công, khóa/xóa theo tổ chức | Class, Membership, Invite, Session |
 | Microlearning + AI | Học 3 tab, hỏi AI đúng ngữ cảnh, lưu tiến độ | Theo dõi tiến độ và nội dung hỗ trợ | Quản lý nội dung, RAG, prompt, quota | Progress, AI Conversation, Usage Log |
-| Bài tập/Assessment | Làm bài, nộp, xem kết quả | Giao bài, theo dõi, override có lý do | Cấu hình chuẩn điểm, xuất báo cáo | Assignment, Attempt, Result, Audit |
+| Bài tập/Assessment trong quá trình học | Làm bài, nộp, xem kết quả | Giao bài, theo dõi, override có lý do | Giám sát và xuất báo cáo | Assignment, Attempt, Result, Audit |
+| Đề xuất Course qua Chat tổng | Mô tả nhu cầu, nhận và chọn Course đề xuất | Không tham gia | Quản lý dữ liệu Course và cấu hình AI/RAG | AI Conversation, Course Recommendation, Course |
 | Kiến thức yếu/Retake | Xem điểm yếu, học lại, yêu cầu/làm Retake | Xem tổng hợp điểm yếu của lớp | Giám sát tài nguyên AI và chi phí | Weak Knowledge, Learning Profile, Retake |
 | Tự luận | Nộp bài, xem kết quả chính thức | Duyệt/sửa kết quả AI chấm nháp | Cấu hình rubric, giám sát | Essay Submission, Draft Grade, Official Grade |
 | Câu hỏi/ma trận | Chỉ nhận đề đã được phân phối | Tạo/import/export, lập ma trận, AI sinh nếu Pro | Kiểm duyệt AI, quản lý ngân hàng tổng | Question, Matrix, Exam, Approval |
@@ -636,10 +649,10 @@ Các nhánh phụ bắt buộc:
 |---|---|---|
 | STU-01 | STU-02 → STU-03 → STU-04 | Chọn ngành, tìm và đăng ký Course |
 | STU-01/STU-20 | STU-22 → STU-21 → STU-23 | Tham gia lớp, xem lớp và buổi học |
-| STU-07/STU-09 | AI Drawer ↔ STU-08 | Hỏi AI và mở lịch sử đúng ngữ cảnh |
+| STU-01/sidebar | STU-08 → STU-04 | Hỏi Chat tổng, nhận đề xuất Course và mở chi tiết Course |
+| STU-07/STU-09/STU-11 | AI Drawer ↔ STU-08 | Hỏi AI và mở lịch sử đúng ngữ cảnh |
 | STU-10 | STU-11 → STU-07 | Xem lỗi sai, luyện câu tương tự, học lại |
 | STU-12 | STU-19 → STU-10/STU-24 | Xem tiến độ và lịch sử các loại bài |
-| STU-01/STU-04 | STU-25 → STU-26 → STU-27 → STU-04 | Assessment đầu vào và Course đề xuất |
 
 ### 16.2. Không gian Teacher
 
@@ -703,7 +716,6 @@ Các nhánh phụ bắt buộc:
 | ADM-01 | ADM-06 → ADM-07 → ADM-08/09 | Quản lý ngành và Course |
 | ADM-10 | ADM-11 → ADM-12 | Quản lý/kiểm định tài nguyên |
 | ADM-13 | ADM-14 | Tạo/sửa câu hỏi chính thức |
-| ADM-01 | ADM-17 | Chuẩn Assessment và ngưỡng pass |
 | ADM-01 | ADM-18 → ADM-19 | Cấu hình và giám sát AI |
 | ADM-01 | ADM-20 → ADM-12/04 | Quản trị kho Teacher và audit |
 | ADM-01 | ADM-21 → ADM-22 → ADM-04 | Xử lý report/khiếu nại và truy vết |
@@ -803,7 +815,8 @@ Quy ước: **C** = Create, **R** = Read, **U** = Update/decision, **A** = Appro
 | Class | R khi là thành viên | C/R/U theo lớp phụ trách | C/R/U/M theo tổ chức | TEA-05/06 hoặc ADM-24 | STU-20–23, TEA-03–08, ADM-24/25 | Class phải tham chiếu Course publish |
 | Membership/Invite | C yêu cầu tham gia | C/R/U lời mời và duyệt | R/M/can thiệp | STU-22, TEA-07 | STU-21, TEA-07, ADM-25 | Tuân theo Open/Approval/Invite |
 | Microlearning Progress | C/U qua hoạt động | R/M; override theo quyền | R/M | STU-07/09 | STU-06/12, TEA-09/10, ADM-01 | Completed không bị hạ khi attempt sau thấp hơn |
-| AI Conversation | C/R bản thân | M nội dung trong phạm vi hỗ trợ | R/M/cấu hình retention | AI Drawer, STU-08 | STU-08, ADM-18/19 | Gắn Course/Lesson/Microlearning/tab/question |
+| AI Conversation | C/R bản thân | M nội dung trong phạm vi hỗ trợ | R/M/cấu hình retention | AI Drawer, STU-08 | STU-08, ADM-18/19 | Chat tổng gắn nhu cầu học; chat trong bài gắn Course/Lesson/Microlearning/tab/question |
+| Course Recommendation | C/R qua Chat tổng | Không truy cập | R/M dữ liệu nguồn và chất lượng AI | STU-08 + AI Service | STU-08, STU-04, ADM-18/19 | Suy ra từ nội dung hội thoại và chỉ chọn Course đang publish; không dùng điểm hoặc level |
 | Assignment | R/làm khi được giao | C/R/U | R/M | TEA-11/19 | STU-09/24, TEA-12/13 | Teacher phải xác nhận kiểm định trước khi giao |
 | Attempt/Result | C/R bản thân | R/M/U override | R/M/xuất báo cáo | STU-09/17/24 | STU-10/12/19, TEA-09/13, ADM-01 | Override lưu điểm cũ, mới, actor và lý do |
 | Weak Knowledge/Profile | R bản thân | R/M theo lớp | R/M | Hệ thống từ Attempt | STU-13/14, TEA-09/10 | Không cho Teacher sửa trực tiếp dữ liệu suy ra |
@@ -908,7 +921,7 @@ flowchart TD
     S06["STU-06<br/>Phòng học<br/>Chọn Microlearning mở"]
     S07["STU-07<br/>Microlearning<br/>Kiến thức · Mô phỏng · Bài tập"]
     AID["AI Drawer<br/>Hỏi AI theo đúng ngữ cảnh"]
-    S08["STU-08<br/>Lịch sử AI<br/>Mở lại hội thoại"]
+    S08["STU-08<br/>Chat tổng và lịch sử AI<br/>Hỏi chung hoặc mở lại hội thoại"]
     S09["STU-09<br/>Làm bài<br/>Trả lời và nộp"]
     S10["STU-10<br/>Kết quả attempt<br/>Xem điểm và lỗi"]
     PASS{"Đủ điều kiện<br/>hoàn thành?"}
@@ -950,7 +963,7 @@ flowchart TD
 4. Student đã hoàn thành Assignment bắt buộc nếu Microlearning có gắn Assignment.
 5. Teacher có thể mở khóa theo quyền, nhưng thao tác phải được ghi audit.
 
-### 22.3. Cây Student – lớp học và Assessment đầu vào
+### 22.3. Cây Student – lớp học và đề xuất Course qua Chat tổng
 
 ```mermaid
 flowchart TD
@@ -962,9 +975,8 @@ flowchart TD
     WAIT["Trạng thái chờ duyệt<br/>Theo dõi kết quả yêu cầu"]
     S23["STU-23<br/>Chi tiết buổi học<br/>Xem phòng, link, nội dung"]
     S06["STU-06<br/>Phòng học Course"]
-    S25["STU-25<br/>Thiết lập Assessment đầu vào"]
-    S26["STU-26<br/>Làm Assessment đầu vào"]
-    S27["STU-27<br/>Kết quả và Course đề xuất"]
+    S08["STU-08<br/>Chat tổng<br/>Hỏi nhu cầu và nhận đề xuất Course"]
+    RECOMMEND["AI phân tích nhu cầu<br/>Hiển thị danh sách Course phù hợp"]
     S04["STU-04<br/>Chi tiết Course"]
 
     S01 -->|Chọn Lớp học| S20
@@ -975,14 +987,15 @@ flowchart TD
     WAIT -->|Teacher phê duyệt| S21
     S21 -->|Chọn buổi học| S23
     S21 -->|Nhấn Học Course| S06
-    S01 -->|Chọn Đánh giá đầu vào| S25
-    S25 -->|Nhấn Bắt đầu| S26
-    S26 -->|Xác nhận nộp| S27
-    S27 -->|Chọn Course đề xuất| S04
+    S01 -->|Chọn Chat tổng| S08
+    S08 -->|Gửi câu hỏi về nhu cầu học| RECOMMEND
+    RECOMMEND -->|AI trả lời và đề xuất Course| S08
+    S08 -->|Chọn một Course được đề xuất| S04
+    S04 -->|Quay lại hội thoại| S08
 
     classDef student fill:#dbeafe,stroke:#2563eb,color:#172554;
     classDef decision fill:#fef3c7,stroke:#d97706,color:#451a03;
-    class S01,S20,S22,S21,WAIT,S23,S06,S25,S26,S27,S04 student;
+    class S01,S20,S22,S21,WAIT,S23,S06,S08,RECOMMEND,S04 student;
     class JOIN decision;
 ```
 
@@ -1245,7 +1258,7 @@ Sitemap này là kiến trúc màn hình mục tiêu để tiếp tục:
 
 1. Chuẩn hóa User Flow riêng cho Student, Teacher và Admin.
 2. Tạo Screen Flow chi tiết cho từng flow chính.
-3. Đối chiếu route FE hiện tại với 87 màn hình mục tiêu.
+3. Đối chiếu route FE hiện tại với 88 màn hình mục tiêu.
 4. Viết prompt cho Stitch theo từng cụm màn hình, không sinh rời rạc.
 5. Lập ma trận `Feature → Screen → API → Permission → Test case`.
 
